@@ -1,7 +1,7 @@
 package com.exxeta.ai.web;
 
 import com.exxeta.ai.image.AzureOpenAiImageClient;
-import com.exxeta.ai.model.QuizQuestion;
+import com.exxeta.ai.model.QuizQuestions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.ChatClient;
 import org.springframework.ai.chat.ChatResponse;
@@ -76,9 +76,6 @@ class ChatController {
                 Map.of("topic", topic, "questions", questions, "format", outputParser.getFormat()));
         var chatResponse = azureOpenAiChatClient.call(promptTemplate.create());
         return outputParser.parse(chatResponse.getResult().getOutput().getContent());
-    }
-
-    record QuizQuestions(List<QuizQuestion> questions) {
     }
 
 }
