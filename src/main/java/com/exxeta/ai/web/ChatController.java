@@ -4,7 +4,6 @@ import com.exxeta.ai.image.AzureOpenAiImageClient;
 import com.exxeta.ai.model.QuizQuestions;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.ChatClient;
-import org.springframework.ai.chat.ChatResponse;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.image.ImageClient;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -54,15 +52,14 @@ class ChatController {
 
     @GetMapping("/rag")
     String springBoot(@RequestParam(defaultValue = "What is the emblem of Summer Olympics 2024") String prompt) {
-        List<Document> similarDocuments = vectorStore.similaritySearch(SearchRequest.query(prompt).withTopK(2));
-        List<String> contentList = similarDocuments.stream().map(Document::getContent).toList();
+        var similarDocuments = vectorStore.similaritySearch(SearchRequest.query(prompt).withTopK(2));
+        var contentList = similarDocuments.stream().map(Document::getContent).toList();
         var promptTemplate = new PromptTemplate(ragTemplate);
         Map<String, Object> promptParameters = new HashMap<>();
         promptParameters.put("input", prompt);
         promptParameters.put("documents", String.join("\n", contentList));
 
-        ChatResponse response = azureOpenAiChatClient.call(promptTemplate.create(promptParameters));
-        return response.getResult().getOutput().getContent();
+        return azureOpenAiChatClient.call(promptTemplate.render(promptParameters));
     }
 
     @GetMapping("/quiz/{topic}")
@@ -74,8 +71,7 @@ class ChatController {
                 """;
         var promptTemplate = new PromptTemplate(userPrompt,
                 Map.of("topic", topic, "questions", questions, "format", outputParser.getFormat()));
-        var chatResponse = azureOpenAiChatClient.call(promptTemplate.create());
-        return outputParser.parse(chatResponse.getResult().getOutput().getContent());
+        return outputParser.parse(azureOpenAiChatClient.call(promptTemplate.render()));
     }
 
 }
