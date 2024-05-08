@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 @Getter
@@ -31,7 +30,7 @@ public class VectorStoreConfiguration {
     private Resource resource;
 
     @Bean
-    VectorStore simpleVectorStore(EmbeddingClient embeddingClient) throws IOException {
+    VectorStore simpleVectorStore(EmbeddingClient embeddingClient) {
         var simpleVectorStore = new SimpleVectorStore(embeddingClient);
         var vectorStoreJson = new File(path);
         if (vectorStoreJson.exists()) { // load existing vector store if exists
