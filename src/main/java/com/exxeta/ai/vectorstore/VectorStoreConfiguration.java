@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -25,26 +26,25 @@ import java.util.List;
 @ConfigurationProperties(prefix = "app.vectorstore")
 public class VectorStoreConfiguration {
 
-    private String vectorStorePath;
-
-    private Resource path;
+    private String path;
 
     private Resource resource;
 
     @Bean
     VectorStore simpleVectorStore(EmbeddingClient embeddingClient) throws IOException {
-        SimpleVectorStore simpleVectorStore = new SimpleVectorStore(embeddingClient);
-        if (path.exists()) { // load existing vector store if exists
-            log.info("Vector store found - Loading from {}", path.getFilename());
-            simpleVectorStore.load(path.getFile());
+        var simpleVectorStore = new SimpleVectorStore(embeddingClient);
+        var vectorStoreJson = new File(path);
+        if (vectorStoreJson.exists()) { // load existing vector store if exists
+            log.info("Vector store found - Loading from {}", path);
+            simpleVectorStore.load(vectorStoreJson);
         } else { // otherwise load the documents and save the vector store
-            log.info("No Vector store found - creating embeddings into {}", path.getFilename());
+            log.info("No Vector store found - creating embeddings into {}", path);
             TikaDocumentReader documentReader = new TikaDocumentReader(resource);
             List<Document> documents = documentReader.get();
             TextSplitter textSplitter = new TokenTextSplitter();
             List<Document> splitDocuments = textSplitter.apply(documents);
             simpleVectorStore.add(splitDocuments);
-            simpleVectorStore.save(path.getFile());
+            simpleVectorStore.save(vectorStoreJson);
         }
         return simpleVectorStore;
     }
