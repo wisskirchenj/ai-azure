@@ -10,7 +10,7 @@ stages:          # List of stages for jobs, and their order of execution
 # runtime for each build is more reliable since the runtime is completely
 # isolated from any previous builds.
 variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false --stacktrace"
 
 before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
