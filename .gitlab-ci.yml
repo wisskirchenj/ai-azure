@@ -10,7 +10,7 @@ stages:          # List of stages for jobs, and their order of execution
 # runtime for each build is more reliable since the runtime is completely
 # isolated from any previous builds.
 variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false --stacktrace"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
@@ -18,7 +18,7 @@ before_script:
 
 build:
   stage: build
-  script: gradle --build-cache assemble
+  script: gradle --build-cache --stacktrace assemble
   artifacts:
     paths:
       - build/distributions/*
@@ -31,7 +31,7 @@ build:
 
 test:
   stage: test
-  script: gradle check
+  script: gradle --stacktrace check
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: pull
