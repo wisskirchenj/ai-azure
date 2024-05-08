@@ -9,8 +9,8 @@ stages:          # List of stages for jobs, and their order of execution
 # is usually a priority over speed in CI environments. Using a fresh
 # runtime for each build is more reliable since the runtime is completely
 # isolated from any previous builds.
-variables:
-  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+#variables:
+#  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
 
 before_script:
   - GRADLE_USER_HOME="$(pwd)/.gradle"
@@ -19,9 +19,9 @@ before_script:
 build:
   stage: build
   script: gradle --build-cache --stacktrace assemble
-  artifacts:
-    paths:
-      - build/distributions/*
+#  artifacts:
+#    paths:
+#      - build/distributions/*
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
