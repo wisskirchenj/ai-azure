@@ -7,7 +7,9 @@ to demonstrate the capabilities of Chat, RAG, vector store and diverse image use
 
 - Spring Boot 3.2.5
 - Spring AI 0.8.1 (spring-ai-azure-openai, spring-ai-azure-vector-store)
+- Thymeleaf UI with Bootstrap 5 and JavaScript fetch API
 - Apache Tika Document Reader (spring-ai-tika-document-reader to read and tokenize arbitrary document types)
+- Java 21 with GraalVM allowing AOT / Native container image
 - Lombok
 - Gradle 8.7
 
@@ -35,7 +37,7 @@ AI Model output to POJOs, image generation, function calling, etc..
 
 This repository contains a demo application - and for testing purpose - that connects to ai.exxeta API deployed at
 Azure OpenAI. Currently the usage is only via CLI-tools as http(ie), curl or Postman.
-But a simple UI will probably be provided soon.
+A first simple draft Thymeleaf UI is now provided.
 
 A future deployment to the cloud *may be possible*, e.g. to provide access via RAG to training material by a
 specialised chat bot.
@@ -59,3 +61,13 @@ ChatController contains GET-endpoints for
 
 > /quiz/{topic}?questions={number}: POJO-mapping example, where AI response generates `number` (default 3) quiz Q&A objects on the {topic} with diverse difficulty. 
 
+13.05.24 Added a simple UI with Thymeleaf and Bootstrap 5. JavaScript fetch API is used to call the endpoints.
+The browser endpoints are now:
+
+> /chat-data: normal chat page with entry for prompt and context data stuffing
+
+> /chat-rag: chat page with additional RAG access (resource provided by application.properties)
+
+> /gen-quiz: quiz generation page with entry for topic and number of questions - producing Json output
+
+> /quiz-table?topic={topic}&questions={number}: thymeleaf table view of the generated quiz questions.
