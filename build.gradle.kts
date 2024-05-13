@@ -25,11 +25,15 @@ repositories {
 
 extra["springAiVersion"] = "0.8.1"
 
+val bootstrapVersion = "5.3.3"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.ai:spring-ai-azure-openai-spring-boot-starter")
     implementation("org.springframework.ai:spring-ai-azure-vector-store-spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    implementation("org.webjars:bootstrap:$bootstrapVersion")
     implementation("org.springframework.ai:spring-ai-tika-document-reader")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
